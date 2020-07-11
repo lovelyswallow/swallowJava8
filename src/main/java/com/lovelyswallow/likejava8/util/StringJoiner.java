@@ -4,7 +4,9 @@ public class StringJoiner {
 
   private StringBuilder sb;
   private final String delimiter;
+  private final int prefixLength;
   private final String suffix;
+  private String emptyValue;
   private boolean isFirst = true;
   private static final String BLANK = "";
 
@@ -21,10 +23,20 @@ public class StringJoiner {
   }
 
   public StringJoiner(CharSequence delimiter, CharSequence prefix, CharSequence suffix, int capacity) {
+    if (prefix == null) {
+      throw new NullPointerException("The prefix must not be null");
+    }
+    if (delimiter == null) {
+      throw new NullPointerException("The delimiter must not be null");
+    }
+    if (suffix == null) {
+      throw new NullPointerException("The suffix must not be null");
+    }
     this.sb = new StringBuilder(capacity);
+    this.prefixLength = prefix.length();
     this.sb.append(prefix.toString());
     this.delimiter = delimiter.toString();
-    this.suffix = suffix == null ? BLANK : suffix.toString();
+    this.suffix = suffix.toString();
   }
 
   public StringJoiner add(CharSequence newElement) {
@@ -37,17 +49,32 @@ public class StringJoiner {
     return this;
   }
 
+  public StringJoiner merge(StringJoiner other) {
+    this.add(other.sb.substring(other.prefixLength, other.sb.length()));
+    return this;
+  }
+
+  public StringJoiner setEmptyValue(CharSequence emptyValue) {
+    if (emptyValue == null) {
+      throw new NullPointerException("The empty value must not be null");
+    }
+    this.emptyValue = emptyValue.toString();
+    return this;
+  }
+
+  public int length() {
+    return this.sb.length() == 0 && this.emptyValue != null ? this.emptyValue.length()
+        : this.sb.length() + this.suffix.length();
+  }
+
   @Override
   public String toString() {
     if (BLANK.equals(this.suffix)) {
       return this.sb.toString();
     }
-    // return this.sb.toString();だとtoStringする度にsuffixが付いてしまうことに気づいたので、新しいsbを作って末尾にsuffixを付け加えてる。パフォマン悪いかもだけど。
-    StringBuilder toString = new StringBuilder(this.sb.length());
+    StringBuilder toString = new StringBuilder(this.length());
     toString.append(this.sb.toString());
-    if (!BLANK.equals(this.suffix)) {
-      toString.append(this.suffix);
-    }
+    toString.append(this.suffix);
     return toString.toString();
   }
 }
