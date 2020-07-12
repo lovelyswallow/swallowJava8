@@ -69,6 +69,9 @@ public class StringJoiner {
 
   @Override
   public String toString() {
+    if (this.sb.length() == 0 && this.emptyValue != null) {
+      return this.emptyValue;
+    }
     if (BLANK.equals(this.suffix)) {
       return this.sb.toString();
     }
