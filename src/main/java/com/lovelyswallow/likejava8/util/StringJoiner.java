@@ -63,13 +63,13 @@ public class StringJoiner {
   }
 
   public int length() {
-    return this.sb.length() == 0 && this.emptyValue != null ? this.emptyValue.length()
+    return isFirst && this.emptyValue != null ? this.emptyValue.length()
         : this.sb.length() + this.suffix.length();
   }
 
   @Override
   public String toString() {
-    if (this.sb.length() == 0 && this.emptyValue != null) {
+    if (isFirst && this.emptyValue != null) {
       return this.emptyValue;
     }
     if (BLANK.equals(this.suffix)) {

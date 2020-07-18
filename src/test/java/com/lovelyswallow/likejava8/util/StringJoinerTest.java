@@ -8,7 +8,91 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 public class StringJoinerTest {
-    @Test public void testSomeLibraryMethod() {
-        assertTrue("aa"==null);
-    }
+
+  @Test
+  public void testAdd_01() {
+    StringJoiner sj = new StringJoiner(",");
+    sj.add("hoge");
+    sj.add("fuga");
+    sj.add("piyo");
+
+    assertEquals("hoge,fuga,piyo", sj.toString());
+  }
+
+  @Test
+  public void testAdd_02() {
+    StringJoiner sj = new StringJoiner(",", "prefix", "suffix");
+    sj.add("hoge");
+    sj.add("fuga");
+    sj.add("piyo");
+
+    assertEquals("prefixhoge,fuga,piyosuffix", sj.toString());
+  }
+
+  @Test
+  public void testMerge_01() {
+    StringJoiner sj1 = new StringJoiner(",", "prefix1", "suffix1");
+    sj1.add("hoge");
+    sj1.add("fuga");
+    sj1.add("piyo");
+    StringJoiner sj2 = new StringJoiner(",", "prefix2", "suffix2");
+    sj2.add("1");
+    sj2.add("2");
+    sj2.add("3");
+
+    assertEquals("prefix1hoge,fuga,piyo,1,2,3suffix1", sj1.merge(sj2).toString());
+  }
+
+  @Test
+  public void testLength_01() {
+    StringJoiner sj = new StringJoiner(",", "prefix", "suffix");
+    sj.add("12345");
+    sj.add("１２３４５");
+
+    assertEquals(23, sj.length());
+  }
+
+  @Test
+  public void testLength_02() {
+    StringJoiner sj = new StringJoiner(",", "prefix", "suffix");
+
+    assertEquals(12, sj.length());
+  }
+
+  @Test
+  public void testLength_03() {
+    StringJoiner sj = new StringJoiner(",", "prefix", "suffix");
+    sj.setEmptyValue("emptyValue");
+
+    assertEquals(10, sj.length());
+  }
+
+  @Test
+  public void testSetEmptyValue_01() {
+    StringJoiner sj = new StringJoiner(",", "prefix", "suffix");
+    sj.setEmptyValue("emptyValue");
+
+    assertEquals("emptyValue", sj.toString());
+  }
+
+  @Test(expected = NullPointerException.class)
+  public void testRequiredValue_01() {
+    new StringJoiner(null, "prefix", "suffix");
+  }
+
+  @Test(expected = NullPointerException.class)
+  public void testRequiredValue_02() {
+    new StringJoiner(",",null, "suffix");
+  }
+
+  @Test(expected = NullPointerException.class)
+  public void testRequiredValue_03() {
+    new StringJoiner(",", "prefix", null);
+  }
+
+  @Test(expected = NullPointerException.class)
+  public void testRequiredValue_04() {
+    StringJoiner sj = new StringJoiner(",", "prefix", "suffix");
+    sj.setEmptyValue(null);
+  }
 }
