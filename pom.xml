@@ -5,7 +5,7 @@
 
  <groupId>io.github.lovelyswallow</groupId>
  <artifactId>swallowJava8</artifactId>
- <version>1.0</version>
+ <version>1.1</version>
  <packaging>jar</packaging>
 
  <name>swallowJava8</name>
@@ -65,8 +65,8 @@
    <plugin>
     <artifactId>maven-compiler-plugin</artifactId>
     <configuration>
-     <source>12</source>
-     <target>12</target>
+     <source>1.7</source>
+     <target>1.7</target>
      <encoding>UTF-8</encoding>
     </configuration>
    </plugin>
@@ -84,17 +84,14 @@
     </executions>
    </plugin>
    <plugin>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-javadoc-plugin</artifactId>
-    <version>3.1.1</version>
-    <executions>
-     <execution>
-      <id>attach-javadocs</id>
-      <goals>
-       <goal>jar</goal>
-      </goals>
-     </execution>
-    </executions>
+     <artifactId>maven-javadoc-plugin</artifactId>
+     <version>3.0.1</version>
+     <configuration>
+       <encoding>UTF-8</encoding>
+       <docencoding>UTF-8</docencoding>
+       <charset>UTF-8</charset>
+       <source>1.7</source>
+     </configuration>
    </plugin>
    <plugin>
     <groupId>org.apache.maven.plugins</groupId>
